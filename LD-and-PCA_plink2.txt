@@ -1,0 +1,41 @@
+# Each code block was used to clean the filtered multisample VCF for LD in the GT workflow (unsupervised learning methods).
+# The order corresponds to the step-by-step procedure.
+
+# Daten für PLINK vorbereiten 
+plink2 --vcf multisample-MAF-filtered_step-04_korrigiert_exp-comp_20_25_MAF-1_pass.vcf.gz \
+       --make-bed \
+       --double-id \
+       --allow-extra-chr \
+       --set-all-var-ids @:#\$r:\$a \
+       --out /PFAD/\
+multisample-MAF-filtered_step-04_korrigiert_exp-comp_20_25_MAF-1_pass_with-IDs
+
+
+# LD-Decay
+# mit allen SNVs aller Chromosomen 
+plink2 --bfile multisample-MAF-filtered_step-04_korrigiert_exp-comp_20_20_MAF-1_pass_with-IDs \
+--allow-extra-chr \
+  --r2-unphased \
+  --ld-window 999999 \
+  --ld-window-kb 1000 \
+  --ld-window-r2 0 \
+  --out ld_decay_all-chr
+
+# Pruning
+plink2 --bfile multisample-MAF-filtered_step-04_korrigiert_exp-comp_20_25_MAF-1_pass_with-IDs \
+  --allow-extra-chr \
+  --indep-pairwise 10kb 0.2 \
+  --out ./pruned_step-10_02/prune_10kb_02
+
+# PCA
+plink2 \
+  --bfile multisample-MAF-filtered_step-04_korrigiert_exp-comp_20_25_MAF-1_pass_with-IDs \
+  --allow-extra-chr \
+  --extract ./pruned_step-05_02/prune_10kb_02.prune.in \
+  --make-bed \
+  --out ./plink2-PCA-pruned-data/pca_input_allchr
+
+plink2 \
+  --bfile pca_input_allchr \
+  --pca 52 \
+  --out pca_results_allchr
