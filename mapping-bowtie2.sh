@@ -1,3 +1,6 @@
+# The script is designed for the expanded dataset, which includes Buckfast, Monticola, and the samples from the CNP paper. 
+# Since Buckfast samples have already been mapped and processed using the analog method, the script is tailored to Monticola and CNP samples.
+
 #!/bin/bash
 
 # 1. Pfade festlegen
