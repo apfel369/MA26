@@ -1,0 +1,50 @@
+# Each of the code blocks was used to further filter the multisample VCF for the GT workflow (unsupervised learning methods). 
+# The order corresponds to the step-by-step procedure.
+
+# -- Missingess per Site Filterung - 20% ----------------------------------------------------------------
+bcftools view --threads 15 -i 'F_MISSING<=0.20' multisample-genotype-filtered_step-01_korrigiert_expanded_complete_pass.vcf.gz \
+-Oz -o \
+/PFAD/\
+\
+multisample-gt-missing-per-site-filtered_step-02_korrigiert_20_exp-comp_pass.vcf.gz
+
+
+# -- Missingess per Sample Filterung - 25% ----------------------------------------------------------------
+#!/usr/bin/env bash
+
+in="multisample-gt-missing-per-site-filtered_step-02_korrigiert_20_exp-comp_pass.vcf.gz"
+
+out="/PFAD/\
+\
+multisample-missing-per-sample-filtered_step-03_korrigiert_exp-comp_20_25_pass.vcf.gz"
+
+cutoff="0.25"
+
+bcftools view \
+  -S ^<(
+    paste \
+      <(bcftools query -f '[%SAMPLE\t]\n' "$in" | head -1 | tr '\t' '\n') \
+      <(
+        bcftools query -f '[%GT\t]\n' "$in" | \
+        awk '{
+          for (i=1; i<=NF; i++) if ($i=="./." || $i==".|.") miss[i]++
+        }
+        END {
+          for (i=1; i<=NF; i++) print ((i in miss ? miss[i] : 0) / NR)
+        }'
+      ) | \
+      awk -v c="$cutoff" '$2 > c {print $1}'
+  ) \
+  -Oz -o "$out" "$in"
+
+tabix -p vcf "$out"
+
+
+# -- MAF ----------------------------------------------------------------
+bcftools +fill-tags \
+multisample-missing-per-sample-filtered_step-03_korrigiert_exp-comp_20_25_pass.vcf.gz \
+-Ou -- -t MAF \
+| bcftools view -i 'MAF>=0.01' \
+-Oz -o /PFAD/\
+\
+multisample-MAF-filtered_step-04_korrigiert_exp-comp_20_25_MAF-1_pass.vcf.gz

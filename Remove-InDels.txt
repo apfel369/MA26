@@ -1,0 +1,14 @@
+# Code that removes InDels in the same way across all workflows that use called genotype data
+
+mkdir -p /tmp_bcftools
+ bcftools view --threads 25 -v snps -Ou \
+  /PFAD/multisample_expanded_complete.norm.split.vcf.gz | \
+bcftools sort -T /tmp_bcftools \
+-Oz -o "multisample-snvs-only_expanded.sorted.vcf.gz"
+
+bcftools index --threads 25 "multisample-snvs-only_expanded.sorted.vcf.gz"
+
+# entfernt InDels, sortiert anschließend und indexiert 
+
+# Aufräumen danach
+rm -rf /tmp_bcftools
