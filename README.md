@@ -23,7 +23,12 @@ Mit Buckfast dann gemeinsam:
 
 ## 4.4 Populationsstrukturanalyse ##
 ### 4.4.1 Klassifikation ###
-Skripte sind unter anderen Branch gelistet
+- HBeeID_Multi-Sample-VCF_based-on-lifted-excel-snps_AmelHAv31.sh
+- v2-filter-multi-sample-vcf-amelhav31.py
+- liftover_to_amel45-and-match_ID.txt
+- v2-indels-entfernen-hbeeid-input-data.sh
+- v2-genotypmatrix-hbeeid-erzeugen.py
+
 
  ### 4.4.2 PCA ###
 Die neuen Referenzproben Monticola und vom CNP-Paper zunächst wie folgt verarbeitet: 
