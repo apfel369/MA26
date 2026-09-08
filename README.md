@@ -29,6 +29,7 @@ Finaler Ablauf:
 - liftover_to_amel45-and-match_ID.sh
 - v2-indels-entfernen-hbeeid-input-data.sh
 - v2-genotypmatrix-hbeeid-erzeugen.py
+
 Durchlauf F:
 - HBeeID-272-amel45-snps_multi-sample-VCF.sh
 - do-biallelic_indels-to-NA-genotype_amel45.sh
