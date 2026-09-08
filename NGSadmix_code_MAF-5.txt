@@ -1,0 +1,26 @@
+# NGSadmix-Analyse
+
+for K in {2..8}; do
+  for seed in 101 202 303 404 505 606 70 808 909 1001; do
+    NGSadmix \
+      -likes /PFAD/run-a3/all_samples_angsd.pruned.beagle.gz \
+      -K ${K} \
+      -P 18 \
+      -minInd 57 \
+      -minMaf 0.05 \
+      -maxiter 2000 \
+      -tol 1e-5 \
+      -seed ${seed} \
+      -o ngsadmix_K${K}_MAF-5_seed${seed}
+  done
+done
+
+cd /PFAD/
+
+for f in ngsadmix_K*_MAF-5_seed*.log; do
+    K=$(basename "$f" | sed -E 's/.*_K([0-9]+)_.*/\1/')
+    L=$(grep 'best like=' "$f" | tail -n 1 | sed -E 's/.*best like=([^ ]+).*/\1/')
+    printf "%s\t%s\n" "$K" "$L"
+done | sort -n > ngsadmix_loglikelihoods_v2-maf5.tsv
+
+# die TSV dient als Eingabe bei CLUMPAK
