@@ -51,3 +51,6 @@ Die neuen Referenzproben Monticola und vom CNP-Paper zunächst wie folgt verarbe
 
 #### 4.4.2.2 Likelihood-basierter Ansatz ####
 - GL-Pipeline.sh
+
+ ### 4.4.3 Admixture-Analyse ###
+ - NGSadmix_code_MAF-5.txt
